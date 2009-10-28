@@ -98,7 +98,7 @@ public interface Watchable {
      * <p> An invocation of this method behaves in exactly the same way as the
      * invocation
      * <pre>
-     *     watchable.{@link #register(WatchService,WatchEvent.Kind[],WatchEvent.Modifier[]) register}(watcher, events, new WatchEvent.Modifier[0]);
+     *     watchable.{@link #register(WatchService, com.barbarysoftware.watchservice.WatchEvent.Kind[], com.barbarysoftware.watchservice.WatchEvent.Modifier...)}  register}(watcher, events, new WatchEvent.Modifier[0]);
      * </pre>
      *
      * @param   watcher

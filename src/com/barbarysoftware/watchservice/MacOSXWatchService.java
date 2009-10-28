@@ -10,6 +10,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class contains the bulk of my implementation of the Watch Service API.
+ *
+ * @author Steve McLeod
+ */
 class MacOSXWatchService extends AbstractWatchService {
 
     // need to keep reference to callbacks to prevent garbage collection

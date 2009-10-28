@@ -14,12 +14,12 @@ public abstract class WatchService implements Closeable {
      * <p/>
      * <p> If a thread is currently blocked in the {@link #take take} or {@link
      * #poll(long,TimeUnit) poll} methods waiting for a key to be queued then
-     * it immediately receives a {@link java.nio.file.ClosedWatchServiceException}. Any
-     * valid keys associated with this watch service are {@link java.nio.file.WatchKey#isValid
+     * it immediately receives a {@link ClosedWatchServiceException}. Any
+     * valid keys associated with this watch service are {@link WatchKey#isValid
      * invalidated}.
      * <p/>
      * <p> After a watch service is closed, any further attempt to invoke
-     * operations upon it will throw {@link java.nio.file.ClosedWatchServiceException}.
+     * operations upon it will throw {@link ClosedWatchServiceException}.
      * If this watch service is already closed then invoking this method
      * has no effect.
      *
@@ -33,7 +33,7 @@ public abstract class WatchService implements Closeable {
      * present.
      *
      * @return the next watch key, or {@code null}
-     * @throws java.nio.file.ClosedWatchServiceException
+     * @throws ClosedWatchServiceException
      *          if this watch service is closed
      */
     public abstract WatchKey poll();
@@ -46,7 +46,7 @@ public abstract class WatchService implements Closeable {
      * @param unit    a {@code TimeUnit} determining how to interpret the timeout
      *                parameter
      * @return the next watch key, or {@code null}
-     * @throws java.nio.file.ClosedWatchServiceException
+     * @throws ClosedWatchServiceException
      *                              if this watch service is closed, or it is closed while waiting
      *                              for the next key
      * @throws InterruptedException if interrupted while waiting
@@ -58,7 +58,7 @@ public abstract class WatchService implements Closeable {
      * Retrieves and removes next watch key, waiting if none are yet present.
      *
      * @return the next watch key
-     * @throws java.nio.file.ClosedWatchServiceException
+     * @throws ClosedWatchServiceException
      *                              if this watch service is closed, or it is closed while waiting
      *                              for the next key
      * @throws InterruptedException if interrupted while waiting
