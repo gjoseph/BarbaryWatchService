@@ -8,14 +8,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * This class contains the bulk of my implementation of the Watch Service API.
+ * This class contains the bulk of my implementation of the Watch Service API. It hooks into Carbon's
+ * File System Events API.
  *
  * @author Steve McLeod
  */
-class MacOSXWatchService extends AbstractWatchService {
+class MacOSXListeningWatchService extends AbstractWatchService {
 
     // need to keep reference to callbacks to prevent garbage collection
     @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"})
@@ -35,7 +35,7 @@ class MacOSXWatchService extends AbstractWatchService {
 
         final long kFSEventStreamEventIdSinceNow = -1; //  this is 0xFFFFFFFFFFFFFFFF
         final int kFSEventStreamCreateFlagNoDefer = 0x00000002;
-        final CarbonAPI.FSEventStreamCallback callback = new Callback(watchKey, lastModifiedMap);
+        final CarbonAPI.FSEventStreamCallback callback = new MacOSXListening(watchKey, lastModifiedMap);
         callbackList.add(callback);
         final FSEventStreamRef stream = CarbonAPI.INSTANCE.FSEventStreamCreate(
                 Pointer.NULL,
@@ -80,21 +80,20 @@ class MacOSXWatchService extends AbstractWatchService {
         }
     }
 
-    private Map<File, Long> createLastModifiedMap(File folder) {
+    private Map<File, Long> createLastModifiedMap(File file) {
         Map<File, Long> lastModifiedMap = new ConcurrentHashMap<File, Long>();
-        for (File file : recursiveListFiles(folder)) {
-            lastModifiedMap.put(file, file.lastModified());
+        for (File child : recursiveListFiles(file)) {
+            lastModifiedMap.put(child, child.lastModified());
         }
         return lastModifiedMap;
     }
 
-    private static Set<File> recursiveListFiles(File folder) {
+    private static Set<File> recursiveListFiles(File file) {
         Set<File> files = new HashSet<File>();
-        for (File file : folder.listFiles()) {
-            if (file.isDirectory()) {
-                files.addAll(recursiveListFiles(file));
-            } else {
-                files.add(file);
+        files.add(file);
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                files.addAll(recursiveListFiles(child));
             }
         }
         return files;
@@ -111,60 +110,11 @@ class MacOSXWatchService extends AbstractWatchService {
     }
 
 
-    private static class MacOSXWatchKey extends AbstractWatchKey {
-        private final AtomicBoolean cancelled = new AtomicBoolean(false);
-        private final boolean reportCreateEvents;
-        private final boolean reportModifyEvents;
-        private final boolean reportDeleteEvents;
-
-        public MacOSXWatchKey(MacOSXWatchService macOSXWatchService, WatchEvent.Kind<?>[] events) {
-            super(macOSXWatchService);
-            boolean reportCreateEvents = false;
-            boolean reportModifyEvents = false;
-            boolean reportDeleteEvents = false;
-
-            for (WatchEvent.Kind<?> event : events) {
-                if (event == com.barbarysoftware.watchservice.StandardWatchEventKind.ENTRY_CREATE) {
-                    reportCreateEvents = true;
-                } else if (event == com.barbarysoftware.watchservice.StandardWatchEventKind.ENTRY_MODIFY) {
-                    reportModifyEvents = true;
-                } else if (event == com.barbarysoftware.watchservice.StandardWatchEventKind.ENTRY_DELETE) {
-                    reportDeleteEvents = true;
-                }
-            }
-            this.reportCreateEvents = reportCreateEvents;
-            this.reportDeleteEvents = reportDeleteEvents;
-            this.reportModifyEvents = reportModifyEvents;
-        }
-
-        @Override
-        public boolean isValid() {
-            return !cancelled.get() && watcher().isOpen();
-        }
-
-        @Override
-        public void cancel() {
-            cancelled.set(true);
-        }
-
-        public boolean isReportCreateEvents() {
-            return reportCreateEvents;
-        }
-
-        public boolean isReportModifyEvents() {
-            return reportModifyEvents;
-        }
-
-        public boolean isReportDeleteEvents() {
-            return reportDeleteEvents;
-        }
-    }
-
-    private static class Callback implements CarbonAPI.FSEventStreamCallback {
+    private static class MacOSXListening implements CarbonAPI.FSEventStreamCallback {
         private final MacOSXWatchKey watchKey;
         private final Map<File, Long> lastModifiedMap;
 
-        private Callback(MacOSXWatchKey watchKey, Map<File, Long> lastModifiedMap) {
+        private MacOSXListening(MacOSXWatchKey watchKey, Map<File, Long> lastModifiedMap) {
             this.watchKey = watchKey;
             this.lastModifiedMap = lastModifiedMap;
         }

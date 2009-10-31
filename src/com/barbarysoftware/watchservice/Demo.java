@@ -18,8 +18,7 @@ public class Demo {
         file1.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
         file2.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
-        Runnable runnable = createRunnable(watcher);
-        final Thread consumer = new Thread(runnable);
+        final Thread consumer = new Thread(createRunnable(watcher));
         consumer.start();
         System.out.println("Watching for changes for 1 minute...");
         Thread.sleep(60000);

@@ -33,8 +33,7 @@ public abstract class WatchService implements Closeable {
      * present.
      *
      * @return the next watch key, or {@code null}
-     * @throws ClosedWatchServiceException
-     *          if this watch service is closed
+     * @throws ClosedWatchServiceException if this watch service is closed
      */
     public abstract WatchKey poll();
 
@@ -46,10 +45,9 @@ public abstract class WatchService implements Closeable {
      * @param unit    a {@code TimeUnit} determining how to interpret the timeout
      *                parameter
      * @return the next watch key, or {@code null}
-     * @throws ClosedWatchServiceException
-     *                              if this watch service is closed, or it is closed while waiting
-     *                              for the next key
-     * @throws InterruptedException if interrupted while waiting
+     * @throws ClosedWatchServiceException if this watch service is closed, or it is closed while waiting
+     *                                     for the next key
+     * @throws InterruptedException        if interrupted while waiting
      */
     public abstract WatchKey poll(long timeout, TimeUnit unit)
             throws InterruptedException;
@@ -58,15 +56,23 @@ public abstract class WatchService implements Closeable {
      * Retrieves and removes next watch key, waiting if none are yet present.
      *
      * @return the next watch key
-     * @throws ClosedWatchServiceException
-     *                              if this watch service is closed, or it is closed while waiting
-     *                              for the next key
-     * @throws InterruptedException if interrupted while waiting
+     * @throws ClosedWatchServiceException if this watch service is closed, or it is closed while waiting
+     *                                     for the next key
+     * @throws InterruptedException        if interrupted while waiting
      */
     public abstract WatchKey take() throws InterruptedException;
 
     public static WatchService newWatchService() {
-        return new MacOSXWatchService();
+        final String osVersion = System.getProperty("os.version");
+        final int minorVersion = Integer.parseInt(osVersion.split("\\.")[1]);
+        if (minorVersion < 5) {
+            // for Mac OS X prior to Leopard (10.5)
+            return new MacOSXPollingWatchService();
+            
+        } else {
+            // for Mac OS X Leopard (10.5) and upwards
+            return new MacOSXListeningWatchService();
+        }
     }
 
 }
