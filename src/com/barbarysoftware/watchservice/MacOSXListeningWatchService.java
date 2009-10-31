@@ -35,7 +35,7 @@ class MacOSXListeningWatchService extends AbstractWatchService {
 
         final long kFSEventStreamEventIdSinceNow = -1; //  this is 0xFFFFFFFFFFFFFFFF
         final int kFSEventStreamCreateFlagNoDefer = 0x00000002;
-        final CarbonAPI.FSEventStreamCallback callback = new MacOSXListening(watchKey, lastModifiedMap);
+        final CarbonAPI.FSEventStreamCallback callback = new MacOSXListeningCallback(watchKey, lastModifiedMap);
         callbackList.add(callback);
         final FSEventStreamRef stream = CarbonAPI.INSTANCE.FSEventStreamCreate(
                 Pointer.NULL,
@@ -110,11 +110,11 @@ class MacOSXListeningWatchService extends AbstractWatchService {
     }
 
 
-    private static class MacOSXListening implements CarbonAPI.FSEventStreamCallback {
+    private static class MacOSXListeningCallback implements CarbonAPI.FSEventStreamCallback {
         private final MacOSXWatchKey watchKey;
         private final Map<File, Long> lastModifiedMap;
 
-        private MacOSXListening(MacOSXWatchKey watchKey, Map<File, Long> lastModifiedMap) {
+        private MacOSXListeningCallback(MacOSXWatchKey watchKey, Map<File, Long> lastModifiedMap) {
             this.watchKey = watchKey;
             this.lastModifiedMap = lastModifiedMap;
         }
