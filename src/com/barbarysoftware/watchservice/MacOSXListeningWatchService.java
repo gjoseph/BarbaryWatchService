@@ -46,7 +46,7 @@ class MacOSXListeningWatchService extends AbstractWatchService {
                 latency,
                 kFSEventStreamCreateFlagNoDefer);
 
-        final CFRunLoopThread thread = new CFRunLoopThread(stream);
+        final CFRunLoopThread thread = new CFRunLoopThread(stream, file);
         thread.setDaemon(true);
         thread.start();
         threadList.add(thread);
@@ -58,7 +58,8 @@ class MacOSXListeningWatchService extends AbstractWatchService {
         private final FSEventStreamRef streamRef;
         private CFRunLoopRef runLoop;
 
-        public CFRunLoopThread(FSEventStreamRef streamRef) {
+        public CFRunLoopThread(FSEventStreamRef streamRef, File file) {
+            super("WatchService for " + file);
             this.streamRef = streamRef;
         }
 

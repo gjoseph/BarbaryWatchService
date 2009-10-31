@@ -3,10 +3,7 @@ package com.barbarysoftware.watchservice;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * An implementation of the Watch Service API that uses polling. This is suitable for OS X pre-Leopard.
@@ -18,7 +15,12 @@ class MacOSXPollingWatchService extends AbstractWatchService {
     private static final int INITIAL_DELAY = 10; //  in seconds
     private static final int DELAY = 10; // in seconds
 
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "WatchService Thread");
+        }
+    });
 
     MacOSXPollingWatchService() {
     }
