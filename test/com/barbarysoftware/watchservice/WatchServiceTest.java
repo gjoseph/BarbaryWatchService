@@ -18,7 +18,14 @@ public class WatchServiceTest {
         f.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
     }
 
-    @org.junit.Test (expected = NullPointerException.class)
+    @org.junit.Test
+    public void testNonsensePath() throws Exception {
+        final WatchService watcher = WatchService.newWatchService();
+        WatchableFile f = new WatchableFile(new File("/path/to/watch"));
+        f.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+    }
+
+    @org.junit.Test(expected = NullPointerException.class)
     public void testWatchingNull() throws Exception {
         new WatchableFile(null);
     }
