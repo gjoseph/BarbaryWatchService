@@ -8,6 +8,9 @@ public class WatchableFile implements Watchable {
     private final File file;
 
     public WatchableFile(File file) {
+        if (file == null) {
+            throw new NullPointerException("file must not be null");
+        }
         this.file = file;
     }
 

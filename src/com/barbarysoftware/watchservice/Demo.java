@@ -21,7 +21,7 @@ public class Demo {
         final Thread consumer = new Thread(createRunnable(watcher));
         consumer.start();
         System.out.println("Watching for changes for 1 minute...");
-        Thread.sleep(60000);
+        Thread.sleep(6000000);
         consumer.interrupt();
         watcher.close();
 

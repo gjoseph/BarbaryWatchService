@@ -124,24 +124,27 @@ class MacOSXListeningWatchService extends AbstractWatchService {
             final int length = numEvents.intValue();
 
             for (String folderName : eventPaths.getStringArray(0, length)) {
-
                 final Set<File> filesOnDisk = recursiveListFiles(new File(folderName));
 
-                for (File file : findCreatedFiles(filesOnDisk)) {
+                final List<File> createdFiles = findCreatedFiles(filesOnDisk);
+                final List<File> modifiedFiles = findModifiedFiles(filesOnDisk);
+                final List<File> deletedFiles = findDeletedFiles(folderName, filesOnDisk);
+
+                for (File file : createdFiles) {
                     if (watchKey.isReportCreateEvents()) {
                         watchKey.signalEvent(StandardWatchEventKind.ENTRY_CREATE, file);
                     }
                     lastModifiedMap.put(file, file.lastModified());
                 }
 
-                for (File file : findModifiedFiles(filesOnDisk)) {
+                for (File file : modifiedFiles) {
                     if (watchKey.isReportModifyEvents()) {
                         watchKey.signalEvent(StandardWatchEventKind.ENTRY_MODIFY, file);
                     }
                     lastModifiedMap.put(file, file.lastModified());
                 }
 
-                for (File file : findDeletedFiles(folderName, filesOnDisk)) {
+                for (File file : deletedFiles) {
                     if (watchKey.isReportDeleteEvents()) {
                         watchKey.signalEvent(StandardWatchEventKind.ENTRY_DELETE, file);
                     }
