@@ -6,8 +6,12 @@ This is the official BarbaryWatchService repository, moved from https://code.goo
 The current plans for this project are as follows:
 
  * [ ] Mavenize the build
+ * [ ] Figure out possible license issues, and if any, skip the below
  * [ ] Release a 1.0 version as-is, make it available on Maven Central
- * [ ] Work on a 2.0 version which makes this actually working _with_ the Java 7 APIs (i.e lose Java 6 compatibility, win interoperability with other OSes that already have proper file system observation in Java 7)
+ * [ ] Work on a 2.0 version which
+   ** makes this actually working _with_ the Java 7 APIs (i.e lose Java 6 compatibility, win interoperability with other OSes that already have proper file system observation in Java 7),
+   ** removes code duplicated from OpenJDK,
+   ** possibly changes to a more permissive license
 
 Anything below is straight from the original repo (changed markup to AsciiDoc and fixed a couple typos)
 
