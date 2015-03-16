@@ -4,8 +4,6 @@ This is the official BarbaryWatchService repository, moved from https://code.goo
 
 See link:issues/[issues] for current plans.
 
-Anything below is straight from the original repo (changed markup to AsciiDoc and fixed a couple typos)
-
 = An implementation of Java 7's WatchService for Java 6 on Mac OS X
 
 Java 7 has an API to detect file system changes called Watch Service. This project uses JNA to hook into Apple's File System Events API.
@@ -29,3 +27,17 @@ WatchableFile file1 = new WatchableFile(new File("/path/to/watch"));
 http://openjdk.java.net/projects/nio/javadoc/java/nio/file/WatchService.html[Read the JavaDocs for Java 7's Watch Service API].
 
 There is a tutorial for http://blogs.sun.com/thejavatutorials/entry/watching_a_directory_for_changes[Java 7's Watch Service API here].
+
+= Download
+
+Get the Maven dependency:
+
+[source,xml]
+----
+  <dependency>
+    <groupId>net.incongru.watchservice</groupId>
+    <artifactId>barbary-watchservice</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </dependency>
+----
+
