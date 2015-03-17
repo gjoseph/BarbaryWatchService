@@ -4,15 +4,15 @@
 language: objective-c
 jdk:
   - openjdk6
-script: "mvn deploy --settings .travis-settings.xml"
+script:
+  - echo "Installed JRE/JDKs:"
+  - /usr/libexec/java_home -V
+  - echo ""
+  - export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
+  - echo "Now set to:"
+  - java -version
+  - mvn -B -V deploy --settings .travis-settings.xml
 env:
   global:
-    - secure: |-
-        l15P0O3LSHUemqpFvLNr/xWPZR7+2G3rpDBw1A5xmZpvKFw1SGlxP32hHkjDXZIioGJ0h1s
-        GXtQo03Uf1AIBOqiq4yIllnwIS6GsFX4HonFWCktHltX6ZuRICMaAbRdHd4cI3KYH3O0qpF
-        vbrXZ49ayVIsnPlFiep7/MvFOb+YQ=
-
-    - secure: |-
-        hESe389/pqjPIWDR1qz0K7YvjeEN2m+G3HlfG+WFym9F1v0vyP5tTlwKENqwlkV5JJy3cRk
-        VQb/HDBbfuwZ9QqVvHZJ2MMhTkCNMVV60SVKAxMUMxO7UPbStyk+BVIkVHjpVD9+bnBa/gZ
-        u/WF9vzb+YYq8poyZndlIxxOaS16A=
+    - secure: "Lge5UCp/yESW4pM+wTjIvIKA2+RMH3LeQYCHdUgzvUVojmQ8deJS2JLZ4EdORqT+sMolQCUFuRsneib5OJYA3nxFdrMSLRCnRM0sxI20TJ2KDUuslhIUnB/bXU8saNgF22POjp0wJGOd7fSY09+/z3hnDT/wmey859WFAOJUUuI="
+    - secure: "erqbGY3AkJ6qdrPbRtnxJfvTDL77erH3q/idx3s1dHJDuYQBv7nirG1uNSu1exiyBHMUse8MU5OGcIaHoWp5cTNIoH9DD6fKNEhdlgTvqcMOlx4oW/Mc8xO7OU4CjyEKgNAvQjK6bjyz72jX19R22foSTAlns5pHpQtsYfPUowM="
