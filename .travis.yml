@@ -1,5 +1,7 @@
-os: osx
-language: java
+# Ok, so, oddly enough, I have to specify language: objective-c for my build to be triggered in an OSX env
+# os: osx
+# language: java
+language: objective-c
 jdk:
   - openjdk6
 script: "mvn deploy --settings .travis-settings.xml"
