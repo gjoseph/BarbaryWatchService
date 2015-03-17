@@ -10,15 +10,12 @@ before_install:
   - curl -LO https://support.apple.com/downloads/DL1572/en_US/JavaForOSX2014-001.dmg
   - hdiutil mount JavaForOSX2014-001.dmg
   - sudo installer -verbose -package /Volumes/Java\ for\ OS\ X\ 2014-001/JavaForOSX.pkg -target /
-
-script:
-  - echo "Installed JRE/JDKs:"
   - /usr/libexec/java_home -V
-  - echo ""
   - /usr/libexec/java_home -v 1.6
   - export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
-  - echo "Now set to:"
   - java -version
+
+script:
   - mvn -B -V deploy --settings .travis-settings.xml
 
 env:
