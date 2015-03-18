@@ -17,6 +17,7 @@ before_install:
   - mvn -B -V dependency:go-offline # Pre-download all deps and plugins, so the actual script is less verbose.
 
 script:
+  # go-offline doesn't seem to be completely enough, some deps are still (re-?) downloaded in the build. Can't use --offline, since we deploy.
   - mvn -B -V clean deploy --settings .travis-settings.xml
 
 env:
