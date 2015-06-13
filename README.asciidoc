@@ -39,7 +39,7 @@ Get the Maven dependency:
   <dependency>
     <groupId>net.incongru.watchservice</groupId>
     <artifactId>barbary-watchservice</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
   </dependency>
 ----
 
