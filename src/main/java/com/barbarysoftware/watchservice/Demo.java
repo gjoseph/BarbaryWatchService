@@ -20,8 +20,8 @@ public class Demo {
 
         final Thread consumer = new Thread(createRunnable(watcher));
         consumer.start();
-        System.out.println("Watching for changes for 1 minute...");
-        Thread.sleep(6000000);
+        System.out.printf("Watching for changes in %s and %s for 1 minute ...%n", file1.getFile(), file2.getFile());
+        Thread.sleep(60 * 1000);
         consumer.interrupt();
         watcher.close();
 
@@ -47,7 +47,7 @@ public class Demo {
                         }
                         // The filename is the context of the event.
                         @SuppressWarnings({"unchecked"}) WatchEvent<File> ev = (WatchEvent<File>) event;
-                        System.out.println("detected file system event: " + ev.context() + " " + kind);
+                        System.out.printf("Detected file system event: %s at %s%n", kind, ev.context());
 
                     }
 
