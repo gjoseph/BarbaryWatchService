@@ -1,6 +1,6 @@
 This example reports to the command line any changes to the contents of your Downloads and Documents folders. It tracks the entire Downloads and Documents hierarchies.
 
-This example is based on http://blogs.sun.com/thejavatutorials/entry/watching_a_directory_for_changes[Sharon Zakhour's Java 7 Watch Service tutorial].
+This example is based on https://docs.oracle.com/javase/tutorial/essential/io/notification.html[Java 7's Watch Service Tutorial here].
 
 [source,java]
 .Demo.java

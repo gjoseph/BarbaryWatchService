@@ -28,7 +28,7 @@ WatchableFile file1 = new WatchableFile(new File("/path/to/watch"));
 
 http://openjdk.java.net/projects/nio/javadoc/java/nio/file/WatchService.html[Read the JavaDocs for Java 7's Watch Service API].
 
-There is a tutorial for http://blogs.sun.com/thejavatutorials/entry/watching_a_directory_for_changes[Java 7's Watch Service API here].
+There is a tutorial for https://docs.oracle.com/javase/tutorial/essential/io/notification.html[Java 7's Watch Service API here].
 
 = Download
 
