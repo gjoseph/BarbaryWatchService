@@ -1,0 +1,19 @@
+apply plugin: 'java'
+//apply plugin: 'maven'
+
+group = 'net.incongru.watchservice'
+version = '2.0-SNAPSHOT'
+
+description = """Barbary Watch Service for OSX"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+    compile group: 'net.java.dev.jna', name: 'jna', version:'3.2.2'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+}

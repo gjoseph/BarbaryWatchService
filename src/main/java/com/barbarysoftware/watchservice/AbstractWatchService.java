@@ -26,6 +26,9 @@
 package com.barbarysoftware.watchservice;
 
 import java.io.IOException;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
@@ -33,14 +36,14 @@ import java.util.concurrent.TimeUnit;
  * Base implementation class for watch services.
  */
 
-abstract class AbstractWatchService extends WatchService {
+public abstract class AbstractWatchService implements WatchService {
 
     // signaled keys waiting to be dequeued
     private final LinkedBlockingDeque<WatchKey> pendingKeys =
             new LinkedBlockingDeque<WatchKey>();
 
     // special key to indicate that watch service is closed
-    private final WatchKey CLOSE_KEY = new AbstractWatchKey(null) {
+    private final WatchKey CLOSE_KEY = new AbstractWatchKey(null, null) {
         @Override
         public boolean isValid() {
             return true;

@@ -25,6 +25,10 @@
 
 package com.barbarysoftware.watchservice;
 
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.Watchable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +36,7 @@ import java.util.List;
  * Base implementation class for watch keys.
  */
 
-abstract class AbstractWatchKey extends WatchKey {
+abstract class AbstractWatchKey implements WatchKey {
 
     /**
      * Maximum size of event list (in the future this may be tunable)
@@ -42,8 +46,8 @@ abstract class AbstractWatchKey extends WatchKey {
     /**
      * Special event to signal overflow
      */
-    static final Event<Void> OVERFLOW_EVENT =
-            new Event<Void>(StandardWatchEventKind.OVERFLOW, null);
+    static final Event<Object> OVERFLOW_EVENT =
+            new Event<Object>(StandardWatchEventKinds.OVERFLOW, null);
 
     /**
      * Possible key states
@@ -55,14 +59,17 @@ abstract class AbstractWatchKey extends WatchKey {
     // reference to watcher
     private final AbstractWatchService watcher;
 
+    private final Watchable watchable;
+
     // key state
     private State state;
 
     // pending events
     private List<WatchEvent<?>> events;
 
-    protected AbstractWatchKey(AbstractWatchService watcher) {
+    protected AbstractWatchKey(AbstractWatchService watcher, Watchable watchable) {
         this.watcher = watcher;
+        this.watchable = watchable;
         this.state = State.READY;
         this.events = new ArrayList<WatchEvent<?>>();
     }
@@ -95,7 +102,7 @@ abstract class AbstractWatchKey extends WatchKey {
             if (size > 1) {
                 // don't let list get too big
                 if (size >= MAX_EVENT_LIST_SIZE) {
-                    kind = StandardWatchEventKind.OVERFLOW;
+                    kind = StandardWatchEventKinds.OVERFLOW;
                     context = null;
                 }
 
@@ -145,10 +152,15 @@ abstract class AbstractWatchKey extends WatchKey {
         }
     }
 
+    @Override
+    public Watchable watchable() {
+        return this.watchable;
+    }
+
     /**
      * WatchEvent implementation
      */
-    private static class Event<T> extends WatchEvent<T> {
+    private static class Event<T> implements WatchEvent<T> {
         private final WatchEvent.Kind<T> kind;
         private final T context;
 

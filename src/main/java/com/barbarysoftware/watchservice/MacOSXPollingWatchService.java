@@ -2,6 +2,9 @@ package com.barbarysoftware.watchservice;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -29,7 +32,7 @@ class MacOSXPollingWatchService extends AbstractWatchService {
     WatchKey register(WatchableFile watchableFile, WatchEvent.Kind<?>[] events, WatchEvent.Modifier... modifers) throws IOException {
         final File file = watchableFile.getFile();
         final Map<File, Long> lastModifiedMap = createLastModifiedMap(file);
-        final MacOSXWatchKey watchKey = new MacOSXWatchKey(this, events);
+        final MacOSXWatchKey watchKey = new MacOSXWatchKey(this, watchableFile, events);
         final FileTreeScanner scanner = new FileTreeScanner(watchKey, lastModifiedMap, file);
 
         Runnable r = new Runnable() {
@@ -87,21 +90,21 @@ class MacOSXPollingWatchService extends AbstractWatchService {
 
             for (File file : findCreatedFiles(filesOnDisk)) {
                 if (watchKey.isReportCreateEvents()) {
-                    watchKey.signalEvent(StandardWatchEventKind.ENTRY_CREATE, file);
+                    watchKey.signalEvent(StandardWatchEventKinds.ENTRY_CREATE, file);
                 }
                 lastModifiedMap.put(file, file.lastModified());
             }
 
             for (File file : findModifiedFiles(filesOnDisk)) {
                 if (watchKey.isReportModifyEvents()) {
-                    watchKey.signalEvent(StandardWatchEventKind.ENTRY_MODIFY, file);
+                    watchKey.signalEvent(StandardWatchEventKinds.ENTRY_MODIFY, file);
                 }
                 lastModifiedMap.put(file, file.lastModified());
             }
 
             for (File file : findDeletedFiles(filesOnDisk)) {
                 if (watchKey.isReportDeleteEvents()) {
-                    watchKey.signalEvent(StandardWatchEventKind.ENTRY_DELETE, file);
+                    watchKey.signalEvent(StandardWatchEventKinds.ENTRY_DELETE, file);
                 }
                 lastModifiedMap.remove(file);
             }
