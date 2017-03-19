@@ -2,6 +2,10 @@ package com.barbarysoftware.watchservice;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.Watchable;
 
 public class WatchableFile implements Watchable {
 

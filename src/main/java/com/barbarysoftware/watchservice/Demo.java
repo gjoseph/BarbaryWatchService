@@ -1,22 +1,27 @@
 package com.barbarysoftware.watchservice;
 
-import static com.barbarysoftware.watchservice.StandardWatchEventKind.*;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+
+import static java.nio.file.StandardWatchEventKinds.*;
 
 public class Demo {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        final WatchService watcher = WatchService.newWatchService();
+        final WatchService watcher = WatchServiceFactory.newWatchService();
 
         final String home = System.getProperty("user.home");
         final WatchableFile file1 = new WatchableFile(new File(home + "/Downloads"));
         final WatchableFile file2 = new WatchableFile(new File(home + "/Documents"));
+        final WatchableFile file3 = new WatchableFile(new File(home + "/Leoz/transfer/out/bf986ce3"));
 
         file1.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
         file2.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+        file3.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 
         final Thread consumer = new Thread(createRunnable(watcher));
         consumer.start();

@@ -6,6 +6,9 @@ import com.sun.jna.Pointer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,7 +32,7 @@ class MacOSXListeningWatchService extends AbstractWatchService {
         final String s = file.getAbsolutePath();
         final Pointer[] values = {CFStringRef.toCFString(s).getPointer()};
         final CFArrayRef pathsToWatch = CarbonAPI.INSTANCE.CFArrayCreate(null, values, CFIndex.valueOf(1), null);
-        final MacOSXWatchKey watchKey = new MacOSXWatchKey(this, events);
+        final MacOSXWatchKey watchKey = new MacOSXWatchKey(this, watchableFile, events);
 
         final double latency = 1.0; /* Latency in seconds */
 
@@ -132,21 +135,21 @@ class MacOSXListeningWatchService extends AbstractWatchService {
 
                 for (File file : createdFiles) {
                     if (watchKey.isReportCreateEvents()) {
-                        watchKey.signalEvent(StandardWatchEventKind.ENTRY_CREATE, file);
+                        watchKey.signalEvent(StandardWatchEventKinds.ENTRY_CREATE, file);
                     }
                     lastModifiedMap.put(file, file.lastModified());
                 }
 
                 for (File file : modifiedFiles) {
                     if (watchKey.isReportModifyEvents()) {
-                        watchKey.signalEvent(StandardWatchEventKind.ENTRY_MODIFY, file);
+                        watchKey.signalEvent(StandardWatchEventKinds.ENTRY_MODIFY, file);
                     }
                     lastModifiedMap.put(file, file.lastModified());
                 }
 
                 for (File file : deletedFiles) {
                     if (watchKey.isReportDeleteEvents()) {
-                        watchKey.signalEvent(StandardWatchEventKind.ENTRY_DELETE, file);
+                        watchKey.signalEvent(StandardWatchEventKinds.ENTRY_DELETE, file);
                     }
                     lastModifiedMap.remove(file);
                 }

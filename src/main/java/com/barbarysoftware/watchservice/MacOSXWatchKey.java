@@ -1,5 +1,8 @@
 package com.barbarysoftware.watchservice;
 
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.Watchable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class MacOSXWatchKey extends AbstractWatchKey {
@@ -8,18 +11,18 @@ class MacOSXWatchKey extends AbstractWatchKey {
     private final boolean reportModifyEvents;
     private final boolean reportDeleteEvents;
 
-    public MacOSXWatchKey(AbstractWatchService macOSXWatchService, WatchEvent.Kind<?>[] events) {
-        super(macOSXWatchService);
+    public MacOSXWatchKey(AbstractWatchService macOSXWatchService, Watchable watchable, WatchEvent.Kind<?>[] events) {
+        super(macOSXWatchService, watchable);
         boolean reportCreateEvents = false;
         boolean reportModifyEvents = false;
         boolean reportDeleteEvents = false;
 
         for (WatchEvent.Kind<?> event : events) {
-            if (event == StandardWatchEventKind.ENTRY_CREATE) {
+            if (event == StandardWatchEventKinds.ENTRY_CREATE) {
                 reportCreateEvents = true;
-            } else if (event == StandardWatchEventKind.ENTRY_MODIFY) {
+            } else if (event == StandardWatchEventKinds.ENTRY_MODIFY) {
                 reportModifyEvents = true;
-            } else if (event == StandardWatchEventKind.ENTRY_DELETE) {
+            } else if (event == StandardWatchEventKinds.ENTRY_DELETE) {
                 reportDeleteEvents = true;
             }
         }
