@@ -50,13 +50,28 @@
   <distributionManagement>
     <repository>
       <id>sonatype-ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
       <id>sonatype-ossrh</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
+
+  <!-- needed for JDK 1.6 which doesn't support TLS 1.2 -->
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.maven</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <repositories>
+    <repository>
+      <id>repo.maven</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
