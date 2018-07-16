@@ -1,15 +1,9 @@
-# Ok, so, oddly enough, I have to specify language: objective-c for my build to be triggered in an OSX env
-# os: osx
-# language: java
-language: objective-c
-jdk:
-  - openjdk6
+os: osx
+language: java
 
-# Ok, this is cray-cray
 before_install:
-  - curl -LO https://support.apple.com/downloads/DL1572/en_US/JavaForOSX2014-001.dmg
-  - hdiutil mount JavaForOSX2014-001.dmg
-  - sudo installer -verbose -package /Volumes/Java\ for\ OS\ X\ 2014-001/JavaForOSX.pkg -target /
+  - brew tap homebrew/cask-versions
+  - brew cask install java6
   - /usr/libexec/java_home -V # List installed JDK/JREs
   - /usr/libexec/java_home -v 1.6 # Pick 1.6
   - export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
