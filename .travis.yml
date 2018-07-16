@@ -17,7 +17,7 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: ./mvnw -B -V --offline test
+      script: ./mvnw -B -V test
     - stage: deploy
       if: branch = master
       # go-offline doesn't seem to be completely enough, some deps are still (re-?) downloaded in the build. Can't use --offline, since we deploy.
