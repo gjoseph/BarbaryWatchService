@@ -1,6 +1,10 @@
 os: osx
 language: java
 
+cache:
+  directories:
+  - $HOME/.m2
+
 before_install:
   - brew tap homebrew/cask-versions
   - brew cask install java6
