@@ -19,7 +19,7 @@ jobs:
     - stage: test
       script: ./mvnw -B -V test
     - stage: deploy
-      # if: branch = master AND type != pull_request
+      if: branch = master AND type != pull_request
       # go-offline doesn't seem to be completely enough, some deps are still (re-?) downloaded in the build. Can't use --offline, since we deploy
       # 1.6 doesn't have certificates, so we need the 1.8 certs
       script: ./mvnw -B -V --settings .travis-settings.xml -Djavax.net.ssl.trustStore=$(/usr/libexec/java_home -v 1.8)/jre/lib/security/cacerts deploy
