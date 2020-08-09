@@ -8,21 +8,22 @@ cache:
 
 before_install:
   - brew tap homebrew/cask-versions
-  - brew cask install java6
+  # Homebrew removed java7, so needing to use Azul's Zulu7 build
+  # See https://github.com/Homebrew/homebrew-cask-versions/pull/3914
+  - brew cask install zulu7
   - /usr/libexec/java_home -V # List installed JDK/JREs
-  - export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
+  - export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
   - java -version
-  - ./mvnw -B -V --settings .travis-settings.xml dependency:go-offline # Pre-download all deps and plugins, so the actual script is less verbose.
+  - ./mvnw -Dhttps.protocols=TLSv1.2 -B -V --settings .travis-settings.xml dependency:go-offline # Pre-download all deps and plugins, so the actual script is less verbose.
 
 jobs:
   include:
     - stage: test
-      script: ./mvnw -B -V test
+      script: ./mvnw -B -V test --offline
     - stage: deploy
       if: branch = master AND type != pull_request
-      # go-offline doesn't seem to be completely enough, some deps are still (re-?) downloaded in the build. Can't use --offline, since we deploy
-      # 1.6 doesn't have certificates, so we need the 1.8 certs
-      script: ./mvnw -B -V --settings .travis-settings.xml -Djavax.net.ssl.trustStore=$(/usr/libexec/java_home -v 1.8)/jre/lib/security/cacerts deploy
+      # Can't be offline during deploy
+      script: ./mvnw -Dhttps.protocols=TLSv1.2 -B -V --settings .travis-settings.xml deploy
 
 env:
   global:
