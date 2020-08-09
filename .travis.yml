@@ -19,10 +19,9 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: ./mvnw -B -V test --offline
+      script: ./mvnw -B -V test
     - stage: deploy
       if: branch = master AND type != pull_request
-      # Can't be offline during deploy
       script: ./mvnw -Dhttps.protocols=TLSv1.2 -B -V --settings .travis-settings.xml deploy
 
 env:
