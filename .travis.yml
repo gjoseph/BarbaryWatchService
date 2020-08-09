@@ -1,24 +1,28 @@
-# Ok, so, oddly enough, I have to specify language: objective-c for my build to be triggered in an OSX env
-# os: osx
-# language: java
-language: objective-c
-jdk:
-  - openjdk6
+os: osx
+language: java
 
-# Ok, this is cray-cray
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/Library/Caches/Homebrew
+
 before_install:
-  - curl -LO https://support.apple.com/downloads/DL1572/en_US/JavaForOSX2014-001.dmg
-  - hdiutil mount JavaForOSX2014-001.dmg
-  - sudo installer -verbose -package /Volumes/Java\ for\ OS\ X\ 2014-001/JavaForOSX.pkg -target /
+  - brew tap homebrew/cask-versions
+  # Homebrew removed java7, so needing to use Azul's Zulu7 build
+  # See https://github.com/Homebrew/homebrew-cask-versions/pull/3914
+  - brew cask install zulu7
   - /usr/libexec/java_home -V # List installed JDK/JREs
-  - /usr/libexec/java_home -v 1.6 # Pick 1.6
-  - export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
+  - export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
   - java -version
-  - mvn -B -V --settings .travis-settings.xml dependency:go-offline # Pre-download all deps and plugins, so the actual script is less verbose.
+  - ./mvnw -Dhttps.protocols=TLSv1.2 -B -V --settings .travis-settings.xml dependency:go-offline # Pre-download all deps and plugins, so the actual script is less verbose.
 
-script:
-  # go-offline doesn't seem to be completely enough, some deps are still (re-?) downloaded in the build. Can't use --offline, since we deploy.
-  - mvn -B -V --settings .travis-settings.xml clean deploy
+jobs:
+  include:
+    - stage: test
+      script: ./mvnw -B -V test
+    - stage: deploy
+      if: branch = master AND type != pull_request
+      script: ./mvnw -Dhttps.protocols=TLSv1.2 -B -V --settings .travis-settings.xml deploy
 
 env:
   global:
