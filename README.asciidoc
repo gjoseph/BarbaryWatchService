@@ -1,45 +1,13 @@
-= BarbaryWatchService
+= BarbaryWatchService is retired
 
-This is the official BarbaryWatchService repository, moved from https://code.google.com/p/barbarywatchservice/
+BarbaryWatchService was an implementation of Java 7's WatchService for Java 6 on Mac OS X. It was moved from https://code.google.com/p/barbarywatchservice/ to this repository in 2015,
+shortly before I moved across the world, and stopped having any professional use for this library.
+As evidenced by the complete lack of activity in this repo, I have had no spare time or energy to devote to it, and I am finally deciding to officially retire it.
 
-See link:issues/[issues] for current plans.
+If you're interested in the code, you can still find it in the `backup` branch. There are however more active and current alternatives, such as:
 
-image:https://travis-ci.org/gjoseph/BarbaryWatchService.svg?branch=master["Build Status", link="https://travis-ci.org/gjoseph/BarbaryWatchService"]
+* https://github.com/gmethvin/directory-watcher
 
-= An implementation of Java 7's WatchService for Java 6 on Mac OS X
+If you would like your alternative library listed here, that's probably the kind of PR I'll continue having time to review once in a while ;)
 
-Java 7 has an API to detect file system changes called Watch Service. This project uses JNA to hook into Apple's File System Events API.
-
-This is almost a direct drop-in replacement for Java 7's Watch Service API. I've used the API source code from OpenJDK 7 as much as possible.
-
-There's a link:Demo.asciidoc[Demo example here].
-
-A lot of source code is from OpenJDK.
-
-== Differences from Java 7's API
-You obtain a Watch Service instance as follows:
-
-[source,java]
-WatchService watcher = WatchService.newWatchService();
-
-Instead of creating Path objects, use `WatchableFile` objects:
-[source,java]
-WatchableFile file1 = new WatchableFile(new File("/path/to/watch"));
-
-http://openjdk.java.net/projects/nio/javadoc/java/nio/file/WatchService.html[Read the JavaDocs for Java 7's Watch Service API].
-
-There is a tutorial for https://docs.oracle.com/javase/tutorial/essential/io/notification.html[Java 7's Watch Service API here].
-
-= Download
-
-Get the Maven dependency:
-
-[source,xml]
-----
-  <dependency>
-    <groupId>net.incongru.watchservice</groupId>
-    <artifactId>barbary-watchservice</artifactId>
-    <version>1.0</version>
-  </dependency>
-----
-
+✌️
